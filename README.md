@@ -1,2 +1,2 @@
 # zanders-addons
-Several adding specific for Zanders
+Several addons specific for Zanders
