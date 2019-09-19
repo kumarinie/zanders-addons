@@ -9,10 +9,8 @@
                 <field name="partner_id" position="attributes">
                     <attribute name="domain">[('is_company','=',True)]</attribute>
                 </field>
-                <field name="planned_hours" position="before">
+                <field name="user_id" position="after">
                     <field name="invoice_principle"/>
-                </field>
-                <field name="planned_hours" position="after">
                     <field name="fixed_price_amount"/>
                 </field>
                 <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree/field[@name='fee_rate']"
@@ -27,8 +25,7 @@
         <record id="view_task_user_tree" model="ir.ui.view">
             <field name="name">task.user.tree</field>
             <field name="model">task.user</field>
-            <field name="inherit_id"
-                   ref="magnus_invoicing.view_task_user_tree"/>
+            <field name="inherit_id" ref="magnus_invoicing.view_task_user_tree"/>
             <field name="arch" type="xml">
                     <field name="user_id"/>
                     <field name="product_id"/>

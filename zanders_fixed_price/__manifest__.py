@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2018 Willem Hulshof Magnus (www.magnus.nl).
+# Copyright 2019 Willem Hulshof Magnus (www.magnus.nl).
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': "zanders_fixed_price",
@@ -33,6 +33,5 @@
     ],
     # only loaded in demonstration mode
     'demo': [
-#        'demo/demo.xml',
     ],
 }
