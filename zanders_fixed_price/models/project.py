@@ -5,9 +5,15 @@
 from odoo import models, fields, api
 
 
-# class Project(models.Model):
-#     _inherit = "project.project"
-#
+class Project(models.Model):
+    _inherit = "project.project"
+
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('to_be_approved', 'To Be Approved'),
+        ('approved', 'Approved'),
+    ], string='Status', readonly=True, copy=False, store=True, default='draft')
+
 #     invoice_principle = fields.Selection([
 #             ('ff','Fixed Fee'),
 #             ('tm','Time and Material'),
@@ -17,6 +23,26 @@ from odoo import models, fields, api
 #         'invoice.schedule.lines',
 #         'project_id',
 #         string='Invoice Schedule')
+
+    @api.multi
+    def submit(self):
+        self.write({'state':'to_be_approved'})
+
+    @api.multi
+    def approved(self):
+        self.write({'state': 'approved'})
+
+    @api.multi
+    def name_get(self):
+        result = []
+        if 'project_creation_in_progress' in self.env.context:
+            result = super(Project, self).name_get()
+        else:
+            for record in self:
+                name = record.name
+                if record.state == 'approved':
+                    result.append((record.id, name))
+        return result
 
 class Task(models.Model):
     _inherit = "project.task"
@@ -32,6 +58,32 @@ class Task(models.Model):
         string='Fixed Price Amount',
         digits=(16,2)
     )
+
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('to_be_approved', 'To Be Approved'),
+        ('split_accepted', 'Split Accepted'),
+    ], string='Status', readonly=True, copy=False, store=True, default='draft')
+
+    @api.multi
+    def submit(self):
+        self.write({'state': 'to_be_approved'})
+
+    @api.multi
+    def approved(self):
+        self.write({'state': 'split_accepted'})
+
+    @api.multi
+    def name_get(self):
+        result = []
+        if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context:
+            result = super(Task, self).name_get()
+        else:
+            for record in self:
+                name = record.name
+                if record.state == 'split_accepted':
+                    result.append((record.id, name))
+        return result
 
 class TaskUser(models.Model):
     _inherit = 'task.user'

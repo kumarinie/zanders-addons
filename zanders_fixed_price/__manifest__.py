@@ -29,6 +29,7 @@
 
     # always loaded
     'data': [
+        'security/zander_security.xml',
         'views/task_view.xml',
     ],
     # only loaded in demonstration mode

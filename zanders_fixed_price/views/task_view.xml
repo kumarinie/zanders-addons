@@ -6,6 +6,13 @@
             <field name="model">project.task</field>
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button name="submit" type="object" string="Submit" states="draft" groups="project.group_project_manager"/>
+                        <button name="approved" type="object" string="Approve" states="to_be_approved" groups="zanders_fixed_price.group_project_director"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,split_accepted"/>
+                    </header>
+                </xpath>
                 <field name="partner_id" position="attributes">
                     <attribute name="domain">[('is_company','=',True)]</attribute>
                 </field>
@@ -36,5 +43,21 @@
                     </field>
             </field>
         </record>
+
+
+         <record id="edit_project_zander" model="ir.ui.view">
+                <field name="name">project.project.form</field>
+                <field name="model">project.project</field>
+                <field name="inherit_id" ref="project.edit_project"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//sheet" position="before">
+                        <header>
+                            <button name="submit" type="object" string="Submit" states="draft" groups="project.group_project_manager"/>
+                            <button name="approved" type="object" string="Approve" states="to_be_approved" groups="zanders_fixed_price.group_project_controller"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,approved"/>
+                        </header>
+                    </xpath>
+                </field>
+         </record>
 
 </odoo>
