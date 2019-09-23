@@ -68,29 +68,43 @@ class Task(models.Model):
         digits=(16,2)
     )
 
-    state = fields.Selection([
+    status = fields.Selection([
         ('draft', 'Draft'),
         ('to_be_approved', 'To Be Approved'),
         ('split_accepted', 'Split Accepted'),
     ], string='Status', readonly=True, copy=False, store=True, default='draft')
 
     @api.multi
-    def submit(self):
-        self.write({'state': 'to_be_approved'})
+    def submit_task(self):
+        self.write({'status': 'to_be_approved'})
 
     @api.multi
-    def approved(self):
-        self.write({'state': 'split_accepted'})
+    def approved_task(self):
+        self.write({'status': 'split_accepted'})
 
     @api.multi
     def name_get(self):
         result = []
         if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context or 'bin_size' in self.env.context:
             result = super(Task, self).name_get()
+        elif 'filter_on_task_user_dates' in self.env.context and 'sheet_week_from' in self.env.context and 'sheet_week_to' in self.env.context:
+            date_from = datetime.strptime(self.env.context['sheet_week_from'], '%Y-%m-%d %H:%M:%S').date()
+            date_to = datetime.strptime(self.env.context['sheet_week_to'], '%Y-%m-%d %H:%M:%S').date()
+            task_ids = self.search([('project_id', '=', self.env.context['default_project_id'])])
+            task_users = self.env['task.user'].search(
+                [('task_id', 'in', task_ids.ids), ('start_date', '<=', date_from), ('end_date', '>=', date_to)])
+            tasks = []
+            for record in task_users:
+                task = record.task_id
+                if task.id not in tasks:
+                    tasks.append(task.id)
+                    name = task.name
+                    if task.status == 'split_accepted':
+                        result.append((task.id, name))
         else:
             for record in self:
                 name = record.name
-                if record.state == 'split_accepted':
+                if record.status == 'split_accepted':
                     result.append((record.id, name))
         return result
 

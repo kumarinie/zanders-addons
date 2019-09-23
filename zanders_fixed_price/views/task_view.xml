@@ -6,12 +6,11 @@
             <field name="model">project.task</field>
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
-                <xpath expr="//sheet" position="before">
-                    <header>
-                        <button name="submit" type="object" string="Submit" states="draft" groups="project.group_project_manager"/>
-                        <button name="approved" type="object" string="Approve" states="to_be_approved" groups="zanders_fixed_price.group_project_director"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,split_accepted"/>
-                    </header>
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <field name="status" invisible="1"/>
+                    <button name="submit_task" type="object" groups="project.group_project_manager" string="Submit" class="oe_stat_button" icon="fa-play-circle-o" attrs="{'invisible':[('status', '!=', 'draft')]}"/>
+                    <button name="approved_task" type="object" string="Approve" attrs="{'invisible':[('status', '!=', 'to_be_approved')]}" groups="zanders_fixed_price.group_project_director" icon="fa-play-circle-o" class="oe_stat_button"/>
+
                 </xpath>
                 <field name="partner_id" position="attributes">
                     <attribute name="domain">[('is_company','=',True)]</attribute>
