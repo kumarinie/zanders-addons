@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api
+from datetime import datetime
 
 
 class Project(models.Model):
@@ -34,7 +35,7 @@ class Project(models.Model):
 
     @api.multi
     def check_context(self):
-        values = ['project_creation_in_progress', 'search_default_my_tasks', 'search_default_timebox_id', 'bin_size', 'group_by_no_leaf']
+        values = ['project_creation_in_progress', 'search_default_my_tasks', 'search_default_timebox_id', 'bin_size', 'group_by_no_leaf', 'search_default_project_id']
         for val in values:
             if val in self.env.context:
                 return True
@@ -84,7 +85,7 @@ class Task(models.Model):
     @api.multi
     def name_get(self):
         result = []
-        if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context:
+        if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context or 'bin_size' in self.env.context:
             result = super(Task, self).name_get()
         else:
             for record in self:
