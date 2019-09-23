@@ -33,9 +33,17 @@ class Project(models.Model):
         self.write({'state': 'approved'})
 
     @api.multi
+    def check_context(self):
+        values = ['project_creation_in_progress', 'search_default_my_tasks', 'search_default_timebox_id', 'bin_size', 'group_by_no_leaf']
+        for val in values:
+            if val in self.env.context:
+                return True
+        return False
+
+    @api.multi
     def name_get(self):
         result = []
-        if 'project_creation_in_progress' in self.env.context:
+        if self.check_context():
             result = super(Project, self).name_get()
         else:
             for record in self:
