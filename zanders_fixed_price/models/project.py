@@ -93,11 +93,14 @@ class Task(models.Model):
             task_ids = self.search([('project_id', '=', self.env.context['default_project_id'])])
             task_users = self.env['task.user'].search(
                 [('task_id', 'in', task_ids.ids), ('start_date', '<=', date_from), ('end_date', '>=', date_to)])
+            tasks = []
             for record in task_users:
                 task = record.task_id
-                name = task.name
-                if task.status == 'split_accepted':
-                    result.append((task.id, name))
+                if task.id not in tasks:
+                    tasks.append(task.id)
+                    name = task.name
+                    if task.status == 'split_accepted':
+                        result.append((task.id, name))
         else:
             for record in self:
                 name = record.name
