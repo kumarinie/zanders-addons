@@ -31,7 +31,7 @@
     'data': [
         'security/zander_security.xml',
         'views/task_view.xml',
-        'views/hr_timesheet_assets.xml',
+        # 'views/hr_timesheet_assets.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

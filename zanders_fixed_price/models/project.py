@@ -68,19 +68,19 @@ class Task(models.Model):
         digits=(16,2)
     )
 
-    state = fields.Selection([
+    status = fields.Selection([
         ('draft', 'Draft'),
         ('to_be_approved', 'To Be Approved'),
         ('split_accepted', 'Split Accepted'),
     ], string='Status', readonly=True, copy=False, store=True, default='draft')
 
     @api.multi
-    def submit(self):
-        self.write({'state': 'to_be_approved'})
+    def submit_task(self):
+        self.write({'status': 'to_be_approved'})
 
     @api.multi
-    def approved(self):
-        self.write({'state': 'split_accepted'})
+    def approved_task(self):
+        self.write({'status': 'split_accepted'})
 
     @api.multi
     def name_get(self):
@@ -90,7 +90,7 @@ class Task(models.Model):
         else:
             for record in self:
                 name = record.name
-                if record.state == 'split_accepted':
+                if record.status == 'split_accepted':
                     result.append((record.id, name))
         return result
 
