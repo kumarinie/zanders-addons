@@ -99,7 +99,7 @@ class Task(models.Model):
                 if task.id not in tasks:
                     tasks.append(task.id)
                     name = task.name
-                    if task.status == 'split_accepted':
+                    if task.state == 'split_accepted':
                         result.append((task.id, name))
         else:
             for record in self:
