@@ -15,16 +15,16 @@
                     </xpath>
                     <xpath expr="//notebook/page[@name='settings']"
                        position="after">
-                    <page name="rev_split_lines" string="Revenue Split Lines">
-                        <field name="rev_split_lines" context="{'default_project_id':active_id}">
-                            <tree string="Revenue Split Lines" create="true"
-                                  edit="true" delete="true" copy="false">
-                                <field name="user_id" />
-                                <field name="allocated_percentage" />
-                            </tree>
-                        </field>
-                    </page>
-                </xpath>
+                        <page name="rev_split_lines" string="Revenue Split Lines">
+                            <field name="rev_split_lines" context="{'default_project_id':active_id}">
+                                <tree string="Revenue Split Lines" create="true"
+                                      edit="true" delete="true" copy="false" editable="top">
+                                    <field name="user_id" />
+                                    <field name="allocated_percentage" />
+                                </tree>
+                            </field>
+                        </page>
+                    </xpath>
                 </field>
          </record>
 </odoo>

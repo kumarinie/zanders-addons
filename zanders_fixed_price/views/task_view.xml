@@ -32,8 +32,6 @@
             <field name="model">task.user</field>
             <field name="inherit_id" ref="magnus_invoicing.view_task_user_tree"/>
             <field name="arch" type="xml">
-                    <field name="user_id"/>
-                    <field name="product_id"/>
                     <field name="fee_rate" position="after">
                         <field name="start_date"/>
                         <field name="end_date"/>
