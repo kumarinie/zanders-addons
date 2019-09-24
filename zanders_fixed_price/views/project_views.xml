@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+        <!-- Project -->
+        <record id="edit_project_magnus" model="ir.ui.view">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='settings']"
+                       position="after">
+                    <page name="rev_split_lines">
+                        <field name="rev_split_lines" context="{'default_project_id':active_id}">
+                                    <tree string="Revenue Split Lines" create="true"
+                                          edit="true" delete="true" copy="false">
+                                        <field name="user_id" />
+                                        <field name="allocated_percentage" />
+                                    </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+  </data>
+</odoo>

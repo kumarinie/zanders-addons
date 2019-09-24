@@ -32,6 +32,7 @@
         'security/zander_security.xml',
         'views/task_view.xml',
         'views/hr_timesheet_assets.xml',
+        'views/project_views.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
