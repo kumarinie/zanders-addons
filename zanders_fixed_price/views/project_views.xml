@@ -10,7 +10,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//notebook/page[@name='settings']"
                        position="after">
-                    <page name="rev_split_lines">
+                    <page name="rev_split_lines" string="Revenue Split Lines">
                         <field name="rev_split_lines" context="{'default_project_id':active_id}">
                                     <tree string="Revenue Split Lines" create="true"
                                           edit="true" delete="true" copy="false">
