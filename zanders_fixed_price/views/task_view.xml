@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Task -->
-        <record id="view_task_form_inherit" model="ir.ui.view">
-            <field name="name">project.task.form</field>
-            <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2"/>
-            <field name="arch" type="xml">
-                <xpath expr="//div[@class='oe_button_box']" position="inside">
-                    <field name="state" invisible="1"/>
-                    <button name="submit_task" type="object" groups="project.group_project_manager" string="Submit" class="oe_stat_button" icon="fa-play-circle-o" attrs="{'invisible':[('state', '!=', 'draft')]}"/>
-                    <button name="approved_task" type="object" string="Approve" attrs="{'invisible':[('state', '!=', 'to_be_approved')]}" groups="zanders_fixed_price.group_project_director" icon="fa-play-circle-o" class="oe_stat_button"/>
-                </xpath>
-                <field name="partner_id" position="attributes">
-                    <attribute name="domain">[('is_company','=',True)]</attribute>
-                </field>
-                <field name="user_id" position="after">
-                    <field name="invoice_principle"/>
-                    <field name="fixed_price_amount"/>
-                </field>
-                <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree/field[@name='fee_rate']"
-                       position="after" >
+    <record id="view_task_form_inherit" model="ir.ui.view">
+        <field name="name">project.task.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button name="submit_task" type="object" groups="project.group_project_manager" string="Submit" class="oe_stat_button" icon="fa-play-circle-o" attrs="{'invisible':[('state', '!=', 'draft')]}"/>
+                <button name="approve_task" type="object" string="Approve" attrs="{'invisible':[('state', '!=', 'to_be_approved')]}" groups="zanders_fixed_price.group_project_director" icon="fa-play-circle-o" class="oe_stat_button"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,split_accepted"/>
+            </xpath>
+            <field name="partner_id" position="attributes">
+                <attribute name="domain">[('is_company','=',True)]</attribute>
+            </field>
+            <field name="user_id" position="after">
+                <field name="invoice_principle"/>
+                <field name="fixed_price_amount"/>
+            </field>
+            <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree/field[@name='fee_rate']"
+                   position="after" >
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="allocated_percentage"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_user_tree" model="ir.ui.view">
+        <field name="name">task.user.tree</field>
+        <field name="model">task.user</field>
+        <field name="inherit_id" ref="magnus_invoicing.view_task_user_tree"/>
+        <field name="arch" type="xml">
+                <field name="fee_rate" position="after">
                     <field name="start_date"/>
                     <field name="end_date"/>
                     <field name="allocated_percentage"/>
-                </xpath>
-            </field>
-        </record>
-
-        <record id="view_task_user_tree" model="ir.ui.view">
-            <field name="name">task.user.tree</field>
-            <field name="model">task.user</field>
-            <field name="inherit_id" ref="magnus_invoicing.view_task_user_tree"/>
-            <field name="arch" type="xml">
-                    <field name="fee_rate" position="after">
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                        <field name="allocated_percentage"/>
-                    </field>
-            </field>
-        </record>
+                </field>
+        </field>
+    </record>
 
 </odoo>

@@ -57,29 +57,32 @@ class Task(models.Model):
     _inherit = "project.task"
 
     invoice_principle = fields.Selection(
-        [
-	    ('ff', 'Fixed Fee'),
+        [('ff', 'Fixed Fee'),
 	    ('tm', 'Time and Material'),
-	    ('ctm', 'Capped Time and Material')
-        ]
+	    ('ctm', 'Capped Time and Material')]
     )
     fixed_price_amount = fields.Float(
         string='Fixed Price Amount',
         digits=(16,2)
     )
 
-    state = fields.Selection([
-        ('draft', 'Draft'),
+    state = fields.Selection(
+        [('draft', 'Draft'),
         ('to_be_approved', 'To Be Approved'),
-        ('split_accepted', 'Split Accepted'),
-    ], string='Status', readonly=True, copy=False, store=True, default='draft')
+        ('split_accepted', 'Split Accepted')],
+        string='Status',
+        readonly=True,
+        copy=False,
+        store=True,
+        default='draft'
+    )
 
     @api.multi
-    def submit(self):
+    def submit_task(self):
         self.write({'state': 'to_be_approved'})
 
     @api.multi
-    def approved(self):
+    def approve_task(self):
         self.write({'state': 'split_accepted'})
 
     @api.multi
