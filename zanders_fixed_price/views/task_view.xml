@@ -15,6 +15,7 @@
             </field>
             <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree" position="attributes" >
                 <attribute name="editable">top</attribute>
+                <attribute name="context">{'invoice_principle':invoice_principle}</attribute>
             </xpath>
             <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree/field[@name='fee_rate']"
                    position="after" >
@@ -22,9 +23,9 @@
                 <field name="end_date"/>
                 <field name="invoice_principle" invisible="1"/>
                 <field name="allocated_percentage"
-                       attrs="{'invisible': [('invoice_principle','=','tm')]}"/>
+                       invisible="context.get('invoice_principle') = 'tm'"/>
                 <field name="budget_hours"
-                       attrs="{'invisible': [('invoice_principle','=','ff')]}"/>
+                       invisible="context.get('invoice_principle') = 'ff'"/>
             </xpath>
         </field>
     </record>
