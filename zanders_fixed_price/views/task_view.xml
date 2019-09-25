@@ -20,7 +20,11 @@
                    position="after" >
                 <field name="start_date"/>
                 <field name="end_date"/>
-                <field name="allocated_percentage"/>
+                <field name="invoice_principle" invisible="1"/>
+                <field name="allocated_percentage"
+                       attrs="{'invisible': [('invoice_principle','=','tm')]}"/>
+                <field name="budget_hours"
+                       attrs="{'invisible': [('invoice_principle','=','ff')]}"/>
             </xpath>
         </field>
     </record>

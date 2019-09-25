@@ -86,6 +86,12 @@ class TaskUser(models.Model):
         string='% Distribution Key',
         digits=(5,2)
     )
+    budget_hours = fields.Integer(
+        string='Budget in Hours'
+    )
+    invoice_principle = fields.Selection(
+        related=task_id.invoice_principle
+    )
 
     # @api.onchange('user_id')
     # def onchange_user_id(self):
