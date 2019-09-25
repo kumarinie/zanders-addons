@@ -10,7 +10,8 @@
                         <header>
                             <button name="submit" type="object" string="Submit" states="draft" groups="project.group_project_manager"/>
                             <button name="approved" type="object" string="Approve" states="to_be_approved" groups="zanders_fixed_price.group_project_controller"/>
-                            <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,approved"/>
+                            <button name="split_accepted" type="object" string="Split Accepted" states="approved" groups="zanders_fixed_price.group_project_director"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,to_be_approved,approved,split_accepted"/>
                         </header>
                     </xpath>
                     <xpath expr="//notebook/page[@name='settings']"
