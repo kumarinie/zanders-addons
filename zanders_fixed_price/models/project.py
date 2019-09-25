@@ -13,6 +13,7 @@ class Project(models.Model):
         ('draft', 'Draft'),
         ('to_be_approved', 'To Be Approved'),
         ('approved', 'Approved'),
+        ('split_accepted', 'Split Accepted'),
     ], string='Status', readonly=True, copy=False, store=True, default='draft')
 
 #     invoice_principle = fields.Selection([
@@ -34,6 +35,10 @@ class Project(models.Model):
         self.write({'state': 'approved'})
 
     @api.multi
+    def split_accepted(self):
+        self.write({'state': 'split_accepted'})
+
+    @api.multi
     def check_context(self):
         values = ['project_creation_in_progress', 'search_default_my_tasks', 'search_default_timebox_id', 'bin_size', 'group_by_no_leaf', 'search_default_project_id']
         for val in values:
@@ -49,7 +54,7 @@ class Project(models.Model):
         else:
             for record in self:
                 name = record.name
-                if record.state == 'approved':
+                if record.state in ('approved', 'split_accepted'):
                     result.append((record.id, name))
         return result
 
@@ -68,45 +73,45 @@ class Task(models.Model):
         digits=(16,2)
     )
 
-    status = fields.Selection([
-        ('draft', 'Draft'),
-        ('to_be_approved', 'To Be Approved'),
-        ('split_accepted', 'Split Accepted'),
-    ], string='Status', readonly=True, copy=False, store=True, default='draft')
+    # status = fields.Selection([
+    #     ('draft', 'Draft'),
+    #     ('to_be_approved', 'To Be Approved'),
+    #     ('split_accepted', 'Split Accepted'),
+    # ], string='Status', readonly=True, copy=False, store=True, default='draft')
 
-    @api.multi
-    def submit_task(self):
-        self.write({'status': 'to_be_approved'})
+    # @api.multi
+    # def submit_task(self):
+    #     self.write({'status': 'to_be_approved'})
+    #
+    # @api.multi
+    # def approved_task(self):
+    #     self.write({'status': 'split_accepted'})
 
-    @api.multi
-    def approved_task(self):
-        self.write({'status': 'split_accepted'})
-
-    @api.multi
-    def name_get(self):
-        result = []
-        if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context or 'bin_size' in self.env.context:
-            result = super(Task, self).name_get()
-        elif 'filter_on_task_user_dates' in self.env.context and 'sheet_week_from' in self.env.context and 'sheet_week_to' in self.env.context:
-            date_from = datetime.strptime(self.env.context['sheet_week_from'], '%Y-%m-%d %H:%M:%S').date()
-            date_to = datetime.strptime(self.env.context['sheet_week_to'], '%Y-%m-%d %H:%M:%S').date()
-            task_ids = self.search([('project_id', '=', self.env.context['default_project_id'])])
-            task_users = self.env['task.user'].search(
-                [('task_id', 'in', task_ids.ids), ('start_date', '<=', date_from), ('end_date', '>=', date_to)])
-            tasks = []
-            for record in task_users:
-                task = record.task_id
-                if task.id not in tasks:
-                    tasks.append(task.id)
-                    name = task.name
-                    if task.status == 'split_accepted':
-                        result.append((task.id, name))
-        else:
-            for record in self:
-                name = record.name
-                if record.status == 'split_accepted':
-                    result.append((record.id, name))
-        return result
+    # @api.multi
+    # def name_get(self):
+    #     result = []
+    #     if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context or 'bin_size' in self.env.context:
+    #         result = super(Task, self).name_get()
+    #     elif 'filter_on_task_user_dates' in self.env.context and 'sheet_week_from' in self.env.context and 'sheet_week_to' in self.env.context:
+    #         date_from = datetime.strptime(self.env.context['sheet_week_from'], '%Y-%m-%d %H:%M:%S').date()
+    #         date_to = datetime.strptime(self.env.context['sheet_week_to'], '%Y-%m-%d %H:%M:%S').date()
+    #         task_ids = self.search([('project_id', '=', self.env.context['default_project_id'])])
+    #         task_users = self.env['task.user'].search(
+    #             [('task_id', 'in', task_ids.ids), ('start_date', '<=', date_from), ('end_date', '>=', date_to)])
+    #         tasks = []
+    #         for record in task_users:
+    #             task = record.task_id
+    #             if task.id not in tasks:
+    #                 tasks.append(task.id)
+    #                 name = task.name
+    #                 if task.status == 'split_accepted':
+    #                     result.append((task.id, name))
+    #     else:
+    #         for record in self:
+    #             name = record.name
+    #             if record.status == 'split_accepted':
+    #                 result.append((record.id, name))
+    #     return result
 
 class TaskUser(models.Model):
     _inherit = 'task.user'
