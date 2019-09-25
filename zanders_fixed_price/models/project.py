@@ -87,10 +87,14 @@ class Task(models.Model):
                 task = record.task_id
                 if task.id not in tasks:
                     tasks.append(task.id)
-                result.append((task.id, task.name))
+                    name = task.name
+                    if task.status == 'split_accepted':
+                        result.append((task.id, name))
         else:
             for record in self:
-                result.append((record.id, record.name))
+                name = record.name
+                if record.status == 'split_accepted':
+                    result.append((record.id, name))
         return result
 
 
