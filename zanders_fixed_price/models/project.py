@@ -90,7 +90,7 @@ class TaskUser(models.Model):
         string='Budget in Hours'
     )
     invoice_principle = fields.Selection(
-        related=task_id.invoice_principle
+        related='task_id.invoice_principle'
     )
 
     # @api.onchange('user_id')
