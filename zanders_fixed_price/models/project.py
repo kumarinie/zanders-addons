@@ -71,31 +71,6 @@ class Task(models.Model):
         digits=(16,2)
     )
 
-    @api.multi
-    def name_get(self):
-        result = []
-        if 'search_default_my_tasks' in self.env.context or 'search_default_project_id' in self.env.context or 'bin_size' in self.env.context:
-            result = super(Task, self).name_get()
-        elif 'filter_on_task_user_dates' in self.env.context and 'sheet_week_from' in self.env.context and 'sheet_week_to' in self.env.context:
-            date_from = datetime.strptime(self.env.context['sheet_week_from'], '%Y-%m-%d %H:%M:%S').date()
-            date_to = datetime.strptime(self.env.context['sheet_week_to'], '%Y-%m-%d %H:%M:%S').date()
-            task_ids = self.search([('project_id', '=', self.env.context['default_project_id'])])
-            task_users = self.env['task.user'].search(
-                [('task_id', 'in', task_ids.ids), ('start_date', '<=', date_from), ('end_date', '>=', date_to)])
-            tasks = []
-            for record in task_users:
-                task = record.task_id
-                if task.id not in tasks:
-                    tasks.append(task.id)
-                    name = task.name
-                    if task.status == 'split_accepted':
-                        result.append((task.id, name))
-        else:
-            for record in self:
-                name = record.name
-                if record.status == 'split_accepted':
-                    result.append((record.id, name))
-        return result
 
 
 class TaskUser(models.Model):
