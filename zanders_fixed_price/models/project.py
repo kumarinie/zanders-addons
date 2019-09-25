@@ -88,6 +88,9 @@ class Task(models.Model):
                 if task.id not in tasks:
                     tasks.append(task.id)
                 result.append((task.id, task.name))
+        else:
+            for record in self:
+                result.append((record.id, record.name))
         return result
 
 
