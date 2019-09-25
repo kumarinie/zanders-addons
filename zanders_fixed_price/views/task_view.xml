@@ -13,6 +13,9 @@
                 <field name="invoice_principle"/>
                 <field name="fixed_price_amount"/>
             </field>
+            <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree" position="attributes" >
+                <attribute name="editable">top</attribute>
+            </xpath>
             <xpath expr="//page[@name='users']/group/field[@name='task_user_ids']/tree/field[@name='fee_rate']"
                    position="after" >
                 <field name="start_date"/>
