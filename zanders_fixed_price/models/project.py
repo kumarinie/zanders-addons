@@ -61,6 +61,27 @@ class Project(models.Model):
 class Task(models.Model):
     _inherit = "project.task"
 
+    @api.one
+    @api.depends('task_user_ids', 'invoice_principle')
+    def _compute_total_amount(self):
+        total_amt = 0.0
+        planned_hrs = 0.0
+        if self.invoice_principle:
+            if self.invoice_principle == 'ff':
+                for task_user in self.task_user_ids:
+                    total_amt += task_user.allocated_percentage
+            elif self.invoice_principle == 'tm':
+                for task_user in self.task_user_ids:
+                    total_amt += (task_user.budget_hours * task_user.fee_rate)
+            elif self.invoice_principle == 'ctm':
+                for task_user in self.task_user_ids:
+                    total_amt += task_user.budget_hours
+        for task_user in self.task_user_ids:
+            planned_hrs += task_user.budget_hours
+
+        self.fixed_price_amount =total_amt
+        self.planned_hours = planned_hrs
+
     invoice_principle = fields.Selection(
         [('ff', 'Fixed Fee'),
 	    ('tm', 'Time and Material'),
@@ -68,8 +89,18 @@ class Task(models.Model):
     )
     fixed_price_amount = fields.Float(
         string='Fixed Price Amount',
-        digits=(16,2)
+        digits=(16,2),
+        compute='_compute_total_amount',
+        store=True
     )
+
+    planned_hours = fields.Float(
+        string='Initially Planned Hours',
+        compute='_compute_total_amount',
+        store=True,
+        help='Estimated time to do the task, usually set by the project manager when the task is in draft state.'
+    )
+
 
 
 
